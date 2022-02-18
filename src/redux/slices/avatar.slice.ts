@@ -1,115 +1,115 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api, config } from "../helpers/api";
-import fileChecksum from "../helpers/file_reader";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { api, config } from '../helpers/api';
+import fileChecksum from '../helpers/file_reader';
 
 export const createPresignedUrl = async (
   currentFile: any,
   byte_size: any,
-  checksum: any
+  checksum: any,
 ) => {
   const file = {
     filename: currentFile.name,
     byte_size,
     checksum,
-    content_type: "application/jpg",
+    content_type: 'application/jpg',
     metadata: {
-      message: "image for parsing",
+      message: 'image for parsing',
     },
   };
   const result = await api
-    .post(`/presigned_url`, { file })
+    .post('/presigned_url', { file })
     .then((res) => res.data);
-    return result;
+  return result;
 };
 
-type stateAvatar = {
+type StateAvatar = {
   avatar: any,
-  status: "idle" | "pending" | "succeeded" | "failed",
+  status: 'idle' | 'pending' | 'succeeded' | 'failed',
   error: null | unknown
-}
+};
 
-const initialState: stateAvatar= {
+const initialState: StateAvatar = {
   avatar: '',
   status: 'idle',
-  error: null
-}
+  error: null,
+};
 
 export const createAvatar = createAsyncThunk(
-  "avatar/createAvatar", 
+  'avatar/createAvatar',
   async (image:any) => {
-  const checksum = await fileChecksum(image);
-  const presignedFileParams = await createPresignedUrl(
-    image,
-    image.size,
-    checksum
-  );
-  const s3PutOptions = {
-    method: "PUT",
-    headers: presignedFileParams.direct_upload.headers,
-    body: image,
-  };
+    const checksum = await fileChecksum(image);
+    const presignedFileParams = await createPresignedUrl(
+      image,
+      image.size,
+      checksum,
+    );
+    const s3PutOptions = {
+      method: 'PUT',
+      headers: presignedFileParams.direct_upload.headers,
+      body: image,
+    };
 
-  const awsRes = await fetch(
-    presignedFileParams.direct_upload.url,
-    s3PutOptions
-  );
+    const awsRes = await fetch(
+      presignedFileParams.direct_upload.url,
+      s3PutOptions,
+    );
 
-  if (awsRes.status !== 200) return awsRes;
-  const photo = {
-    image: presignedFileParams.blob_signed_id,
-  };
-  const response = await api.post("/avatars", photo);
-  return response.data;
-});
+    if (awsRes.status !== 200) return awsRes;
+    const photo = {
+      image: presignedFileParams.blob_signed_id,
+    };
+    const response = await api.post('/avatars', photo);
+    return response.data;
+  },
+);
 
 export const fetchAvatar = createAsyncThunk(
-  "avatar/fetchAvatar",
+  'avatar/fetchAvatar',
   async (avatarId) => {
-  const response = await api.get(`/avatars/${avatarId}`, config);
-  return avatarId;
- }
-)
+    const response = await api.get(`/avatars/${avatarId}`, config);
+    return response;
+  },
+);
 
 export const deleteAvatar = createAsyncThunk(
-  "avatar/deleteAvatar",
- async (avatarId) => {
-  const response = await api.delete(`/avatars/${avatarId}`, config, avatarId);
-  return response.data.avatar;
- }
-)
-
+  'avatar/deleteAvatar',
+  async (avatarId) => {
+    const response = await api.delete(`/avatars/${avatarId}`, config, avatarId);
+    return response.data.avatar;
+  },
+);
+/* eslint-disable no-param-reassign */
 const avatarSlice = createSlice({
-  name: "avatar",
+  name: 'avatar',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-
-    //post avatar
-    builder.addCase(createAvatar.pending, (state, action) => {
-      state.status = "pending";
+    // post avatar
+    builder.addCase(createAvatar.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(createAvatar.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.avatar = action.payload;
     });
     builder.addCase(createAvatar.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
 
-    //fetch avatar
-    builder.addCase(fetchAvatar.pending, (state, action) => {
-      state.status = "pending";
+    // fetch avatar
+    builder.addCase(fetchAvatar.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(fetchAvatar.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.avatar = action.payload;
     });
     builder.addCase(fetchAvatar.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
-  }
-})
+  },
+});
 
 export default avatarSlice.reducer;

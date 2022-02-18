@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api, config } from "../helpers/api";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { api, config } from '../helpers/api';
 
 type UserData = {
   firstname: string;
@@ -9,113 +9,119 @@ type UserData = {
   password_confirmation: string;
 };
 
-type stateUser = {
+type StateUser = {
   user: UserData;
   error: null | unknown;
-  status: "idle" | "pending" | "succeeded" | "failed";
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
 
-const initialState: stateUser = {
+const initialState: StateUser = {
   user: {
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
   },
   error: null,
-  status: "idle",
+  status: 'idle',
 };
 
 export const createUser = createAsyncThunk(
-  "user/createuser",
+  'user/createuser',
   async (payload) => {
-    const response = await api.post(`/users`, payload);
+    const response = await api.post('/users', payload);
     if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem('token', response.data.token);
       return response.data;
     }
-  }
+    return response.data;
+  },
 );
 
 export const fetchUser = createAsyncThunk(
-  "user/fetchUser",
+  'user/fetchUser',
   async (payload) => {
-  const response = await api.get(`/users/${payload}`, config);
-  return response.data.user;
-});
+    const response = await api.get(`/users/${payload}`, config);
+    return response.data.user;
+  },
+);
 
 export const loginUser = createAsyncThunk(
-  "user/loginUser",
+  'user/loginUser',
   async (payload) => {
-  const response = await api.post(`/auth`, payload);
-  if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
+    const response = await api.post('/auth', payload);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      return response.data;
+    }
     return response.data;
-  }
-});
+  },
+);
 
 export const updateUser = createAsyncThunk(
-  "user/updateUser",
- async (payload) => {
-  const response = await api.put(`/users/${payload}`, config, payload);
-  return response.data;
- }
-)
+  'user/updateUser',
+  async (payload) => {
+    const response = await api.put(`/users/${payload}`, config, payload);
+    return response.data;
+  },
+);
+
+/* eslint-disable no-param-reassign */
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     // user signup
-    builder.addCase(createUser.pending, (state, action) => {
-      state.status = "pending";
+    builder.addCase(createUser.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(createUser.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.user = action.payload;
     });
     builder.addCase(createUser.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
 
     // user login
-    builder.addCase(loginUser.pending, (state, action) => {
-      state.status = "pending";
+    builder.addCase(loginUser.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.user = action.payload;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
 
     // fetch user
-    builder.addCase(fetchUser.pending, (state, action) => {
-      state.status = "pending";
+    builder.addCase(fetchUser.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.user = action.payload;
     });
     builder.addCase(fetchUser.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
 
-    //update user
-    builder.addCase(updateUser.pending, (state, action) => {
-      state.status = "pending";
+    // update user
+    builder.addCase(updateUser.pending, (state) => {
+      state.status = 'pending';
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.user = action.payload;
     });
     builder.addCase(updateUser.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
   },
