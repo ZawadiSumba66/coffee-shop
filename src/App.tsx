@@ -1,8 +1,9 @@
 import React from 'react';
 import { Router, RouteComponentProps } from '@reach/router';
 import './App.css';
-import SignUp from './components/SignUp';
-import Login from './components/Login';
+import SignUp from './components/SignUp/SignUp';
+import Login from './components/Login/Login';
+import HomePage from './containers/HomePage/HomePage';
 /* eslint-disable react/jsx-filename-extension */
 
 const RouterPage = (
@@ -14,6 +15,7 @@ function App() {
     <Router>
       <RouterPage path="signup" pageComponent={<SignUp />} />
       <RouterPage path="/login" pageComponent={<Login />} />
+      <RouterPage path="/" pageComponent={<HomePage />} />
     </Router>
   );
 }
