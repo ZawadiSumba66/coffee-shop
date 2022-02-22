@@ -1,0 +1,15 @@
+.homepage {
+  background-image: url("../../assets/homepage.jpg");
+  height: 80vh;
+  background-size: cover;
+  background-position: center center;
+}
+
+.blur-background {
+  height: 70vh;
+}
+
+.fab {
+    padding-right: 15px;
+}
+
