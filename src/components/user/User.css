@@ -1,0 +1,26 @@
+.signup-form {
+  height: 100vh;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.774),
+      rgba(232, 240, 254, 0.5)
+    ),
+    url("../../assets/cofee-background.jpg");
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  content: fill;
+}
+
+.logo {
+  font-family: "Lobster", cursive;
+}
+
+.input-field {
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.avatar-file {
+  width: 200px;
+  height: 200px;
+}
