@@ -6,7 +6,7 @@ import Logo from '../Logo';
 import SectionImage from '../../assets/SectionImage.jpg';
 import './HomePage.css';
 import CarouselSlide from './CarouselSlide';
-import Footer from './Footer';
+import Footer from '../Footer';
 
 /* eslint-disable react/jsx-filename-extension */
 function HomePage() {
@@ -25,7 +25,7 @@ function HomePage() {
               </Link>
               <Link
                 to="/signup"
-                className="no-underline text-white font-bold rounded-full px-4 py-2 bg-orange-600"
+                className="no-underline text-white font-bold rounded-full px-4 py-2 bg-amber-700"
               >
                 SIGNUP
               </Link>
@@ -33,9 +33,9 @@ function HomePage() {
           </nav>
           <div className="pl-20 pt-20 text-white">
             <h1 className="text-4xl font-bold">Coffee</h1>
-            <h2 className="text-3xl font-bold">The Best For You</h2>
-            <button className="rounded-full text-white p-2 font-bold shadow-2xl w-40 my-10 bg-orange-600 " type="submit">View Menu</button>
-            <div className="text-black">
+            <h2 className="text-3xl font-bold mb-5">The Best For You</h2>
+            <Link to="/dashboard" className="rounded-full text-white px-4 py-2 font-bold shadow-2xl w-40 bg-amber-700">View Menu</Link>
+            <div className="text-black mt-5">
               <FontAwesomeIcon icon={faMugHot} className="text-4xl pr-2" />
               <FontAwesomeIcon icon={faCoffee} className="text-4xl pr-2" />
               <FontAwesomeIcon icon={faBeer} className="text-4xl pr-2" />
@@ -68,7 +68,7 @@ function HomePage() {
         </div>
       </section>
       <section className="mt-10">
-        <h3 className="text-amber-700 font-bold text-2xl mb-8 ml-40">Checkout what our clients have to say about us</h3>
+        <h3 className="font-bold text-2xl mb-8 ml-40">Checkout what our clients have to say about us</h3>
         <CarouselSlide />
       </section>
       <footer>

@@ -1,4 +1,13 @@
-.dashboard {
-    background-color: #9e9794;
-    height: 100vh;
+.username {
+  background-color: #709312;
+}
+
+.coffee-background {
+  background-image:  linear-gradient(
+    rgba(255, 255, 255, 0.88),
+    rgba(232, 240, 254, 0.7)
+  ), url('../../assets/cofee-background.jpg');
+  background-size: cover;
+  background-position: center;
+  content: fill;
 }

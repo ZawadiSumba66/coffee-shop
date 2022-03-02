@@ -18,13 +18,13 @@ export const api = {
   post(endpoint: string, data: unknown) {
     return axios.post(`${RAILS_API}${endpoint}`, data);
   },
-  get(endpoint: string, headers: Config) {
+  get(endpoint: string, headers?: Config) {
     return axios.get(`${RAILS_API}${endpoint}`, headers);
   },
   put(endpoint:string, headers: Config, data: unknown) {
     return axios.put(`${RAILS_API}${endpoint}`, data, headers);
   },
-  delete(endpoint:string, headers: Config, data: unknown) {
-    return axios.put(`${RAILS_API}${endpoint}`, data, headers);
+  delete(endpoint:string, data: undefined) {
+    return axios.delete(`${RAILS_API}${endpoint}`, data);
   },
 };

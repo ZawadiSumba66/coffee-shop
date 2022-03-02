@@ -14,8 +14,8 @@ function CarouselSlide() {
               <div className="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-slate-400 shadow-lg">
                 <img className=" w-full img-card md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg" src={slide.image} alt="imageslide" />
                 <div className="p-6 flex flex-col justify-start">
-                  <h5 className="text-orange-600 text-xl font-medium mb-2">{slide.name}</h5>
-                  <p className="text-white text-base mb-4">{slide.compliment}</p>
+                  <h5 className="text-amber-700 text-xl font-medium mb-2">{slide.name}</h5>
+                  <p className="text-white mb-4 text-sm">{slide.compliment}</p>
                   <p className="italic text-sm">{slide.date}</p>
                 </div>
               </div>

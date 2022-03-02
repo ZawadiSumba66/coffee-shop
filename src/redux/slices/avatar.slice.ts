@@ -73,8 +73,8 @@ export const fetchAvatar = createAsyncThunk(
 
 export const deleteAvatar = createAsyncThunk(
   'avatar/deleteAvatar',
-  async (avatarId) => {
-    const response = await api.delete(`/avatars/${avatarId}`, config, avatarId);
+  async (avatarId: undefined) => {
+    const response = await api.delete(`/avatars/${avatarId}`, avatarId);
     return response.data.avatar;
   },
 );
