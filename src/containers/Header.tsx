@@ -4,8 +4,8 @@ import { Dropdown } from 'react-bootstrap';
 import { Link } from '@reach/router';
 import Logo from './Logo';
 
-/* eslint-disable react/jsx-filename-extension */
 function Header() {
+  const logOut = () => localStorage.clear();
   return (
     <div className="flex justify-between">
       <Logo />
@@ -19,7 +19,7 @@ function Header() {
           <Dropdown.Item className="active:bg-gray-300"><Link to="/favorites" className="hover:no-underline">My favorites</Link></Dropdown.Item>
           <Dropdown.Item className="active:bg-gray-300"><Link to="/settings" className="hover:no-underline">Settings</Link></Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item className="active:bg-gray-300"><Link to="/login" className="hover:no-underline">Log Out</Link></Dropdown.Item>
+          <Dropdown.Item className="active:bg-gray-300"><Link to="/login" onClick={logOut} className="hover:no-underline">Log Out</Link></Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </div>

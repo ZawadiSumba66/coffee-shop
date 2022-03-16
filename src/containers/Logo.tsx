@@ -2,7 +2,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMugHot } from '@fortawesome/free-solid-svg-icons';
 
-/* eslint-disable react/jsx-filename-extension */
 function Logo() {
   return (
     <div>

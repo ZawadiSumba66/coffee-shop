@@ -3,7 +3,6 @@ import { Carousel } from 'react-bootstrap';
 import CarouselData from './CarouselData';
 import './HomePage.css';
 
-/* eslint-disable react/jsx-filename-extension */
 function CarouselSlide() {
   return (
     <div className="bg-gray-300">

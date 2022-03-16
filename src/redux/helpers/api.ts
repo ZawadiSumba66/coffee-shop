@@ -15,8 +15,8 @@ export const config = {
 };
 
 export const api = {
-  post(endpoint: string, data: unknown) {
-    return axios.post(`${RAILS_API}${endpoint}`, data);
+  post(endpoint: string, data: unknown, headers?: Config) {
+    return axios.post(`${RAILS_API}${endpoint}`, data, headers);
   },
   get(endpoint: string, headers?: Config) {
     return axios.get(`${RAILS_API}${endpoint}`, headers);

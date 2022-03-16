@@ -8,7 +8,6 @@ import './HomePage.css';
 import CarouselSlide from './CarouselSlide';
 import Footer from '../Footer';
 
-/* eslint-disable react/jsx-filename-extension */
 function HomePage() {
   return (
     <div>

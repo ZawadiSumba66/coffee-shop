@@ -39,7 +39,7 @@ export const Latte = [
   },
   {
     id: 2,
-    image: 'https://image.shutterstock.com/image-photo/festive-hot-chocolate-whipped-cream-600w-1176402949.jpg',
+    image: 'https://image.shutterstock.com/image-photo/festive-hot-chocolate-whipped-cream-600w`-1176402949.jpg',
     name: 'Hazelnut Latte',
   },
   {

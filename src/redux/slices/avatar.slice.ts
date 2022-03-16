@@ -36,7 +36,7 @@ const initialState: StateAvatar = {
 
 export const createAvatar = createAsyncThunk(
   'avatar/createAvatar',
-  async (image:any) => {
+  async (image:any, { rejectWithValue }) => {
     const checksum = await fileChecksum(image);
     const presignedFileParams = await createPresignedUrl(
       image,
@@ -55,18 +55,27 @@ export const createAvatar = createAsyncThunk(
     );
 
     if (awsRes.status !== 200) return awsRes;
-    const photo = {
+    const file = {
       image: presignedFileParams.blob_signed_id,
     };
-    const response = await api.post('/avatars', photo);
-    return response.data;
+    try {
+      const response = await api.post('/avatars', file, {
+        headers: {
+          Authorization: `token ${localStorage.getItem('token')}`,
+        },
+      });
+      return response.data.avatar_url;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
   },
 );
 
 export const fetchAvatar = createAsyncThunk(
   'avatar/fetchAvatar',
-  async (avatarId) => {
-    const response = await api.get(`/avatars/${avatarId}`, config);
+  async (id) => {
+    const response = await api.get(`/avatars/${id}`, config);
+    console.log('fetch avatar', id);
     return response;
   },
 );

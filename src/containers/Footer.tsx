@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Logo from './Logo';
-/* eslint-disable react/jsx-filename-extension */
 
 function Footer() {
   return (

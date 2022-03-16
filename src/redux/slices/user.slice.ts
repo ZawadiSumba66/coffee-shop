@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { navigate } from '@reach/router';
+import jwtDecode from 'jwt-decode';
 import { api, config } from '../helpers/api';
 
-type UserData = {
+export type UserData = {
   firstname: string;
   lastname: string;
   email: string;
@@ -9,11 +11,14 @@ type UserData = {
   password_confirmation: string;
 };
 
-type StateUser = {
+export type StateUser = {
   user: UserData;
-  error: null | unknown;
+  error: any;
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
+
+export type UserLogin = Pick<UserData, 'email' | 'password'>;
+type UserSettings = Omit<UserData, 'password_confirmation'>;
 
 const initialState: StateUser = {
   user: {
@@ -27,42 +32,65 @@ const initialState: StateUser = {
   status: 'idle',
 };
 
+const token = localStorage.getItem('token');
+let userId: number;
+if (token) {
+  const decoded: any = jwtDecode(token);
+  userId = decoded.sub;
+}
+
 export const createUser = createAsyncThunk(
   'user/createuser',
-  async (payload) => {
-    const response = await api.post('/users', payload);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+  async (user: UserData, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/users', { user });
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
+        return response.data;
+      }
       return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
     }
-    return response.data;
   },
 );
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
-  async (payload) => {
-    const response = await api.get(`/users/${payload}`, config);
-    return response.data.user;
+  async () => {
+    const response = await api.get(`/users/${userId}`, config);
+    console.log('user', response.data);
+    return response.data;
   },
 );
 
 export const loginUser = createAsyncThunk(
   'user/loginUser',
-  async (payload) => {
-    const response = await api.post('/auth', payload);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
+  async (user: UserLogin, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/auth', { user });
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
+        return response.data;
+      }
       return response.data;
+    } catch (error: any) {
+      console.log('reject', error.response.data.errors);
+      return rejectWithValue(error.response.data.errors);
     }
-    return response.data;
   },
 );
 
 export const updateUser = createAsyncThunk(
   'user/updateUser',
-  async (payload) => {
-    const response = await api.put(`/users/${payload}`, config, payload);
+  async (user: UserSettings) => {
+    const response = await api.put(`/users/${userId}`, config, user);
     return response.data;
   },
 );

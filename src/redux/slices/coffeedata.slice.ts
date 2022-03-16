@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api } from '../helpers/api';
 
-type CoffeeData = {
+export type CoffeeData = {
   name: string,
   image: string
 };
@@ -10,6 +10,7 @@ type StateData = {
   latte: CoffeeData[],
   espresso: CoffeeData[],
   popular: CoffeeData[],
+  post: CoffeeData,
   status: 'idle' | 'pending' | 'succeeded' | 'failed',
   error: null | unknown
 };
@@ -18,30 +19,23 @@ const initialState: StateData = {
   latte: [],
   espresso: [],
   popular: [],
+  post: { name: '', image: '' },
   status: 'idle',
   error: null,
 };
 
-export const getPopularCoffee = createAsyncThunk(
-  'data/getPopularCoffee',
+export const getCoffeePosts = createAsyncThunk(
+  'data/getCoffeePosts',
   async () => {
-    const response = await api.get('/populars');
+    const response = await api.get('/posts');
     return response.data;
   },
 );
 
-export const getLatteCoffee = createAsyncThunk(
-  'data/getLatteCoffee',
-  async () => {
-    const response = await api.get('/lattes');
-    return response.data;
-  },
-);
-
-export const getEspressoCoffee = createAsyncThunk(
-  'data/getEspressoCoffee',
-  async () => {
-    const response = await api.get('/espressos');
+export const getCoffeePost = createAsyncThunk(
+  'data/getCoffeePost',
+  async (id: number) => {
+    const response = await api.get(`/posts/${id}`);
     return response.data;
   },
 );
@@ -52,41 +46,17 @@ const coffeeDataSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // get popular coffee
-    builder.addCase(getPopularCoffee.pending, (state) => {
-      state.status = 'pending';
-    });
-    builder.addCase(getPopularCoffee.fulfilled, (state, action) => {
+    // get coffees
+    builder.addCase(getCoffeePosts.fulfilled, (state, action) => {
       state.status = 'succeeded';
-      state.popular = action.payload;
+      state.popular = action.payload.popular;
+      state.espresso = action.payload.espresso;
+      state.latte = action.payload.latte;
     });
-    builder.addCase(getPopularCoffee.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload;
-    });
-    // get espresso coffee
-    builder.addCase(getEspressoCoffee.pending, (state) => {
-      state.status = 'pending';
-    });
-    builder.addCase(getEspressoCoffee.fulfilled, (state, action) => {
+
+    builder.addCase(getCoffeePost.fulfilled, (state, action) => {
       state.status = 'succeeded';
-      state.espresso = action.payload;
-    });
-    builder.addCase(getEspressoCoffee.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload;
-    });
-    // get latte coffee
-    builder.addCase(getLatteCoffee.pending, (state) => {
-      state.status = 'pending';
-    });
-    builder.addCase(getLatteCoffee.fulfilled, (state, action) => {
-      state.status = 'succeeded';
-      state.latte = action.payload;
-    });
-    builder.addCase(getLatteCoffee.rejected, (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload;
+      state.post = action.payload;
     });
   },
 });
