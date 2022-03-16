@@ -21,7 +21,7 @@ function App() {
       <RouterPage path="/" pageComponent={<HomePage />} />
       <RouterPage path="/dashboard" pageComponent={<Dashboard />} />
       <RouterPage path="/settings" pageComponent={<UserSettings />} />
-      <RouterPage path="/coffee/:name" pageComponent={<CustomizeCoffee />} />
+      <RouterPage path="/coffee/:id" pageComponent={<CustomizeCoffee />} />
     </Router>
   );
 }
