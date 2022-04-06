@@ -64,7 +64,7 @@ export const createAvatar = createAsyncThunk(
           Authorization: `token ${localStorage.getItem('token')}`,
         },
       });
-      return response.data.avatar_url;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.message);
     }
@@ -75,7 +75,6 @@ export const fetchAvatar = createAsyncThunk(
   'avatar/fetchAvatar',
   async (id) => {
     const response = await api.get(`/avatars/${id}`, config);
-    console.log('fetch avatar', id);
     return response;
   },
 );
