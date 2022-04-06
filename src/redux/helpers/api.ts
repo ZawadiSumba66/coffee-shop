@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const RAILS_API = 'http://localhost:3001/api/v1';
+export const RAILS_API = 'http://localhost:3001/api/v1';
 
 type Config = {
   headers: {
