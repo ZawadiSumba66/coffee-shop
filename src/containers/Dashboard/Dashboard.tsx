@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-// import { Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import Header from '../Header';
 import Footer from '../Footer';
 import Coffees from './Coffees';
@@ -18,10 +18,12 @@ function Dashboard({ user }: DashboardProps) {
     store.dispatch(fetchUser());
   }, []);
 
-  if (!user) {
+  if (user.firstname === undefined) {
     return (
-      <div className="d-flex justify-content-center align-items-center">
-        <p>loading...</p>
+      <div className="d-flex justify-content-center align-items-center spinner__wrapper">
+        <Spinner animation="border" variant="primary" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
       </div>
     );
   }

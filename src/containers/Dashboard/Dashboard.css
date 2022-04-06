@@ -11,3 +11,9 @@
   background-position: center;
   content: fill;
 }
+
+
+.spinner__wrapper {
+  height: 100vh;
+  color: #B45309;
+}
