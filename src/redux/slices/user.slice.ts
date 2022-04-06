@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { navigate } from '@reach/router';
 import jwtDecode from 'jwt-decode';
+import history from '../../routes/history';
 import { api, config } from '../helpers/api';
 
 export type UserData = {
@@ -13,7 +13,10 @@ export type UserData = {
 
 export type StateUser = {
   user: UserData;
-  error: any;
+  login_error: any;
+  signup_error: any;
+  update_error: any;
+  get_error: any;
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
 
@@ -28,7 +31,10 @@ const initialState: StateUser = {
     password: '',
     password_confirmation: '',
   },
-  error: null,
+  login_error: null,
+  signup_error: null,
+  update_error: null,
+  get_error: null,
   status: 'idle',
 };
 
@@ -47,7 +53,7 @@ export const createUser = createAsyncThunk(
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         setTimeout(() => {
-          navigate('/dashboard');
+          history.push('/dashboard');
         }, 1000);
         return response.data;
       }
@@ -75,13 +81,12 @@ export const loginUser = createAsyncThunk(
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         setTimeout(() => {
-          navigate('/dashboard');
+          history.replace('/dashboard');
         }, 1000);
         return response.data;
       }
       return response.data;
     } catch (error: any) {
-      console.log('reject', error.response.data.errors);
       return rejectWithValue(error.response.data.errors);
     }
   },
@@ -111,7 +116,7 @@ const userSlice = createSlice({
     });
     builder.addCase(createUser.rejected, (state, action) => {
       state.status = 'failed';
-      state.error = action.payload;
+      state.signup_error = action.payload;
     });
 
     // user login
@@ -124,7 +129,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.status = 'failed';
-      state.error = action.payload;
+      state.login_error = action.payload;
     });
 
     // fetch user
@@ -137,7 +142,7 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchUser.rejected, (state, action) => {
       state.status = 'failed';
-      state.error = action.payload;
+      state.get_error = action.payload;
     });
 
     // update user
@@ -150,7 +155,7 @@ const userSlice = createSlice({
     });
     builder.addCase(updateUser.rejected, (state, action) => {
       state.status = 'failed';
-      state.error = action.payload;
+      state.update_error = action.payload;
     });
   },
 });
