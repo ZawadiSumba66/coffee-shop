@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, RouteComponentProps } from '@reach/router';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import SignUp from './components/user/SignUp/SignUp';
 import Login from './components/user/Login/Login';
@@ -7,23 +7,23 @@ import HomePage from './containers/HomePage/HomePage';
 import Dashboard from './containers/Dashboard/Dashboard';
 import UserSettings from './components/user/Settings/UserSettings';
 import CustomizeCoffee from './components/coffee/CustomizeCoffee';
-/* eslint-disable react/jsx-filename-extension */
+import Checkout from './components/payment/Checkout';
+import PrivateRoute from './routes/PrivateRoute';
+import NotFound from './routes/NotFound';
 
-const RouterPage = (
-  props: { pageComponent: JSX.Element } & RouteComponentProps,
-) => props.pageComponent;
+/* eslint-disable react/function-component-definition */
 
-function App() {
-  return (
-    <Router>
-      <RouterPage path="signup" pageComponent={<SignUp />} />
-      <RouterPage path="/login" pageComponent={<Login />} />
-      <RouterPage path="/" pageComponent={<HomePage />} />
-      <RouterPage path="/dashboard" pageComponent={<Dashboard />} />
-      <RouterPage path="/settings" pageComponent={<UserSettings />} />
-      <RouterPage path="/coffee/:id" pageComponent={<CustomizeCoffee />} />
-    </Router>
-  );
-}
+const App = () => (
+  <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/signup" element={<SignUp />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
+    <Route path="/coffee/:id" element={<PrivateRoute><CustomizeCoffee /></PrivateRoute>} />
+    <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
 
 export default App;
