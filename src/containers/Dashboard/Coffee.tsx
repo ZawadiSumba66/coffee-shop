@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -12,10 +12,11 @@ type CoffeeProps = {
 };
 
 function Coffee({ coffee }: CoffeeProps) {
+  const { id } = coffee;
   return (
     <div>
       <div className="rounded-xl shadow-2xl bg-gray-200 h-48">
-        <Link to={`/coffee/${coffee.id}`} data-mdb-ripple="true" data-mdb-ripple-color="light">
+        <Link to={`/coffee/${id}`} data-mdb-ripple="true" data-mdb-ripple-color="light">
           <img src={coffee.image} alt={coffee.name} className=" h-40 w-100" />
         </Link>
         <div className="flex justify-between">
