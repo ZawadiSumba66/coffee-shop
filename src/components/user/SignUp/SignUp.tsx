@@ -37,7 +37,6 @@ function SignUp({ errors }: SignupProps) {
     } else {
       setStatus('SIGNUP');
     }
-    console.log('submit errors', errors);
     store.dispatch(createUser(values));
   };
 

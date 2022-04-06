@@ -33,7 +33,6 @@ function Login({ errors }: LoginProps) {
       setStatus('Logging in...');
     }
     store.dispatch(loginUser(values));
-    console.log('submit errors', errors);
   };
 
   return (
