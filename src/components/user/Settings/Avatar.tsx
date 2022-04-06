@@ -21,12 +21,12 @@ function AvatarFile({ avatar }: any) {
 
   useEffect(() => {
     store.dispatch(fetchAvatar());
-  }, [avatar]);
+  }, []);
 
   return (
     <div className="text-sm pl-40">
       <div className="cursor-pointer avatar-file mb-2 bg-amber-700 rounded-full">
-        <img src={avatar} alt="user profile" className="avatar-file rounded-full" />
+        <img src={avatar.avatar_url} alt="user profile" className="avatar-file rounded-full" />
       </div>
       <form onSubmit={handleUpload}>
         <input type="file" onChange={(e) => fileChange(e.target.files)} />
