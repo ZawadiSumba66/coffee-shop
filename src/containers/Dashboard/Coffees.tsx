@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { getCoffeePosts } from '../../redux/slices/coffeedata.slice';
+import { getCoffeePosts } from '../../redux/slices/categories.slice';
 import Coffee from './Coffee';
 
 type CoffeesProps = {
