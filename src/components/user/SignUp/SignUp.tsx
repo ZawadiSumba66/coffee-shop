@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import '../User.css';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
 import Logo from '../../../containers/Logo';
 import store from '../../../redux/store';
 import { createUser } from '../../../redux/slices/user.slice';
@@ -31,12 +31,13 @@ function SignUp({ errors }: SignupProps) {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (errors !== null) {
-      setStatus('SIGN UP');
-    } else {
-      setStatus('Signing up...');
-    }
     e.preventDefault();
+    if (errors === null) {
+      setStatus('Signing up...');
+    } else {
+      setStatus('SIGNUP');
+    }
+    console.log('submit errors', errors);
     store.dispatch(createUser(values));
   };
 
@@ -47,8 +48,9 @@ function SignUp({ errors }: SignupProps) {
         <div className="errors">
           {errors ? (
             <div>
+              <p>Kindly correct the errors below</p>
               {errors.map((item: string) => (
-                <li className="text-danger" key={Date.now() * Math.random()}>{item}</li>
+                <li className="text-danger font-semibold" key={Date.now() * Math.random()}>{item}</li>
               ))}
             </div>
           ) : (
@@ -137,12 +139,12 @@ function SignUp({ errors }: SignupProps) {
 
 type SignupState = {
   user: {
-    error: [],
+    signup_error: [],
   }
 };
 
 const mapStateToProps = (state: SignupState) => ({
-  errors: state.user.error,
+  errors: state.user.signup_error,
 });
 
 export default connect(mapStateToProps)(SignUp);

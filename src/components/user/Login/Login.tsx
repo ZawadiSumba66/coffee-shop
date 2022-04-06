@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import '../User.css';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
 import Logo from '../../../containers/Logo';
 import store from '../../../redux/store';
 import { loginUser } from '../../../redux/slices/user.slice';
@@ -29,12 +29,10 @@ function Login({ errors }: LoginProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    store.dispatch(loginUser(values));
-    if (errors !== null) {
-      setStatus('LOGIN');
-    } else {
+    if (!errors) {
       setStatus('Logging in...');
     }
+    store.dispatch(loginUser(values));
     console.log('submit errors', errors);
   };
 
@@ -42,7 +40,7 @@ function Login({ errors }: LoginProps) {
     <div className="signup-form backdrop-blur-sm">
       <div className="flex-1 justify-center pl-40 pt-40">
         <Logo />
-        {errors}
+        <p className="text-sm text-red-500 font-semibold">{errors}</p>
         <form onSubmit={handleSubmit}>
           <div>
             <TextField
@@ -89,12 +87,12 @@ function Login({ errors }: LoginProps) {
 
 type LoginState = {
   user: {
-    error: string,
+    login_error: string,
   }
 };
 
 const mapStateToProps = (state: LoginState) => ({
-  errors: state.user.error,
+  errors: state.user.login_error,
 });
 
 export default connect(mapStateToProps)(Login);
