@@ -1,96 +1,191 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { useParams } from '@reach/router';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMugHot } from '@fortawesome/free-solid-svg-icons';
+import { faMugHot, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../containers/Header';
-import { getCoffeePost } from '../../redux/slices/coffeedata.slice';
+import { getCoffeePost } from '../../redux/slices/categories.slice';
 import './coffee.css';
+import '../../containers/Dashboard/Dashboard.css';
 import Footer from '../../containers/Footer';
-
-/* eslint-disable react/jsx-filename-extension */
+import { Milk, Size, Topping } from './parameter';
+// import Flash from './Flash';
+// import store from '../../redux/store';
+// import { createCoffeeParameters } from '../../redux/slices/coffee.slice';
+import Checkout from '../payment/Checkout';
 
 type CoffeeProps = {
-  post: { name: '', image: '' }
+  post: { name: '', image: '', price: number }
 };
 
+const size: Size[] = [
+  { measure: 'text-2xl', description: 'small' },
+  { measure: 'text-4xl', description: 'medium' },
+  { measure: 'text-5xl', description: 'large' },
+];
+
+const milk: Milk[] = [
+  { type: 'Normal' },
+  { type: 'Soya Milk' },
+  { type: 'Oat Milk' },
+];
+
+const topping: Topping[] = [
+  { type: 'Almond' },
+  { type: 'Caramel' },
+  { type: 'Chocolate' },
+  { type: 'Mint' },
+  { type: 'Vodka' },
+];
+
 function CustomizeCoffee({ post }: CoffeeProps) {
-  const { id } = useParams();
+  const [selectedSize, setSelectedSize] = useState<Size>();
+  const [selectedMilk, setSelectedMilk] = useState<Milk>();
+  const [selectedTopping, setSelectedTopping] = useState<Topping>();
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  let { id }: any = useParams();
+  id = parseInt(id, 10);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCoffeePost(id));
-  }, []);
+  }, [selectedPrice]);
 
+  // const handleSelect = (e: any) => {
+  //   e.preventDefault();
+  //   const parameters = {
+  //     name: post.name,
+  //     size: selectedSize?.description,
+  //     milk: selectedMilk?.type,
+  //     topping: selectedTopping?.type,
+  //     price: selectedPrice,
+  //   };
+
+  //   if (selectedSize === undefined) {
+  //     window.flash('Kindly select atleast the size option', 'warning');
+  //   } else {
+  //     store.dispatch(createCoffeeParameters(parameters));
+  //     window.flash('You are good to go', 'success');
+  //   }
+  //   setSelectedSize(undefined);
+  //   setSelectedMilk(undefined);
+  //   setSelectedTopping(undefined);
+  // };
+
+  const toggleModal = (toogle: boolean, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (e) e.preventDefault();
+    // if (selectedSize === undefined) {
+    //   window.flash('Kindly select atleast the size option', 'warning');
+    // } else {
+    //   window.flash('You are good to go', 'success');
+    // }
+    setSelectedSize(undefined);
+    setSelectedMilk(undefined);
+    setSelectedTopping(undefined);
+    setShowModal(toogle);
+  };
+
+  const handlePrice = (option: Size) => {
+    setSelectedSize(option);
+    switch (option.description) {
+      case 'small':
+        return setSelectedPrice(post.price + 15);
+      case 'medium':
+        return setSelectedPrice(post.price + 20);
+      case 'large':
+        return setSelectedPrice(post.price + 25);
+      default:
+        return selectedPrice;
+    }
+  };
   return (
     <div>
       <div className="mx-10 mt-10">
         <Header />
       </div>
-      <div className="flex mt-20 mb-3">
+      <h4 className="font-semibold mt-10 mb-3 ml-20">Feel free to choose any topping or milk you prefer at our cost!</h4>
+      <div className="flex mb-3">
         <div className="mx-20">
           <img src={post.image} alt={post.name} className="drop-shadow-2xl coffee-image rounded-2xl" />
           <p className="font-bold text-lg pl-10 mt-2">{post.name}</p>
         </div>
         <div>
-          <div className="flex mt-10">
+          <div className="flex">
             <span className="font-bold pr-5">Size:</span>
-            <div>
-              <FontAwesomeIcon icon={faMugHot} className="text-2xl pr-5 text-gray-300" />
-              <p className="text-xs">small</p>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faMugHot} className="text-4xl pr-5 text-gray-300" />
-              <p className="text-xs">medium</p>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faMugHot} className="text-5xl pr-2 text-gray-300" />
-              <p className="text-xs">large</p>
+            <div className="flex">
+              {size.map((option) => (
+                <div key={option.description}>
+                  <FontAwesomeIcon
+                    icon={faMugHot}
+                    className={`${option.measure} cursor-pointer pr-5 text-gray-300 ${selectedSize?.description === option.description ? 'text-black' : undefined}`}
+                    onClick={() => handlePrice(option)}
+                  />
+                  <p className="text-xs font-semibold">{option.description}</p>
+                </div>
+              ))}
             </div>
           </div>
           <div className="flex mt-3">
             <span className="font-bold pr-5">Milk:</span>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Normal</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Soya Milk</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Oat Milk</button>
+            <div className="flex">
+              {milk.map((option) => (
+                <button
+                  key={option.type}
+                  type="button"
+                  className={`bg-gray-300 text-black font-semibold border-none px-2 py-1 mr-2 rounded-lg ${selectedMilk?.type === option.type ? 'bg-black text-white' : undefined}`}
+                  onClick={() => setSelectedMilk(option)}
+                >
+                  {option.type}
+                </button>
+              ))}
             </div>
           </div>
           <div className="flex mt-4">
             <span className="font-bold pr-3">Topping:</span>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Almond</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Caramel</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Chocolate</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Mint</button>
-            </div>
-            <div>
-              <button type="button" className="bg-gray-300 text-black border-none px-2 py-1 mr-2 rounded-lg">Vodka</button>
+            <div className="flex">
+              {topping.map((option) => (
+                <button
+                  key={option.type}
+                  type="button"
+                  className={`bg-gray-300 font-semibold text-black border-none px-2 py-1 mr-2 rounded-lg ${selectedTopping?.type === option.type ? 'bg-black text-white' : undefined}`}
+                  onClick={() => setSelectedTopping(option)}
+                >
+                  {option.type}
+                </button>
+              ))}
             </div>
           </div>
-          <div className="flex mt-4">
-            <span className="font-bold pr-3">Price:</span>
+          <div className="flex mt-3">
+            <span className="font-bold pr-3">Total Price:</span>
+            <span className="font-semibold">
+              KES
+              {' '}
+              {selectedPrice}
+            </span>
           </div>
+          <button type="submit" onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(true, e)} className="border-none px-2 py-1 font-bold text-white rounded-lg bg-amber-700 mt-5">CHECKOUT</button>
         </div>
       </div>
+      <Link to="/dashboard">
+        <div className="flex items-center cursor cursor-pointer my-1 mr-2 justify-end">
+          <FontAwesomeIcon icon={faAngleLeft} className="text-2xl pr-1" />
+          <span>Back to menu</span>
+        </div>
+      </Link>
       <Footer />
+      <Checkout
+        price={selectedPrice}
+        show={showModal}
+        onHide={(e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(false, e)}
+      />
     </div>
   );
 }
 
 type PostState = {
   data: {
-    post: { name: '', image: '' }
+    post: { name: '', image: '', price: number }
   }
 };
 
