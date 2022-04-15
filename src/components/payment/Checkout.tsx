@@ -1,5 +1,6 @@
 import React from 'react';
-import { Elements, StripeProvider } from 'react-stripe-elements';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { Modal } from 'react-bootstrap';
 import CheckoutForm from './CheckoutForm';
 
@@ -7,10 +8,18 @@ type ModalProps = {
   show: boolean,
   onHide: ((e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined,
   price: number
+  post: {
+    image: string,
+    name: string
+  }
 };
+const PUBLIC_KEY = 'pk_test_51Jzi59LnUe7MF1EUOSLkS3Dh02B33WCYk5wTu2lTvQh4aeJH6Y8p8B3JQIrcFGsEvXGr245ZmEziQzj4RixaMGCa00gdYTzb38';
+const stripePromise = loadStripe(PUBLIC_KEY);
 
 /* eslint-disable react/function-component-definition */
-const Checkout: React.FunctionComponent<any> = ({ price, show, onHide }: ModalProps) => (
+const Checkout: React.FunctionComponent<any> = ({
+  price, show, onHide, post,
+}: ModalProps) => (
   <Modal
     size="lg"
     show={show}
@@ -19,11 +28,9 @@ const Checkout: React.FunctionComponent<any> = ({ price, show, onHide }: ModalPr
     centered
   >
     <Modal.Body>
-      <StripeProvider apiKey={`${process.env.PUBLISHABLE_KEY}`}>
-        <Elements>
-          <CheckoutForm orderId={price} />
-        </Elements>
-      </StripeProvider>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm price={price} post={post} />
+      </Elements>
     </Modal.Body>
   </Modal>
 );
