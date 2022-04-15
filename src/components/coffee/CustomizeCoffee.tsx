@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMugHot, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../containers/Header';
@@ -10,11 +10,12 @@ import '../../containers/Dashboard/Dashboard.css';
 import Footer from '../../containers/Footer';
 import { Milk, Size, Topping } from './parameter';
 import Flash from './Flash';
-import store from '../../redux/store';
-import { createCoffeeParameters } from '../../redux/slices/coffee.slice';
+import Checkout from '../payment/Checkout';
+
+/* eslint-disable no-unneeded-ternary */
 
 type CoffeeProps = {
-  post: { name: '', image: '', price: number }
+  post: { name: '', image: '', price: number },
 };
 
 const size: Size[] = [
@@ -42,34 +43,31 @@ function CustomizeCoffee({ post }: CoffeeProps) {
   const [selectedMilk, setSelectedMilk] = useState<Milk>();
   const [selectedTopping, setSelectedTopping] = useState<Topping>();
   const [selectedPrice, setSelectedPrice] = useState(0);
-  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+
   let { id }: any = useParams();
   id = parseInt(id, 10);
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCoffeePost(id));
-  }, [selectedPrice]);
+  }, []);
 
-  const handleSelect = (e: any) => {
-    e.preventDefault();
-    const parameters = {
-      name: post.name,
-      size: selectedSize?.description,
-      milk: selectedMilk?.type,
-      topping: selectedTopping?.type,
-      price: selectedPrice,
-    };
-
-    if (selectedSize === undefined) {
-      window.flash('Kindly select atleast the size option', 'warning');
-    } else {
-      store.dispatch(createCoffeeParameters(parameters));
-      navigate('/checkout');
-    }
-    setSelectedSize(undefined);
+  const parameters = {
+    name: post.name,
+    image: post.image,
+    size: selectedSize?.description,
+    milk: selectedMilk?.type,
+    topping: selectedTopping?.type,
+    price: selectedPrice,
+  };
+  const toggleModal = (toggle: boolean, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (e) e.preventDefault();
+    console.log(parameters);
     setSelectedMilk(undefined);
     setSelectedTopping(undefined);
+    setSelectedSize(undefined);
+    setShowModal(toggle);
   };
 
   const handlePrice = (option: Size) => {
@@ -91,7 +89,7 @@ function CustomizeCoffee({ post }: CoffeeProps) {
         <Header />
       </div>
       <Flash />
-      <h4 className="font-semibold mt-10 mb-3 ml-20">Feel free to choose any topping or milk you prefer at our cost!</h4>
+      <h4 className="font-semibold mt-10 mb-3 ml-20">For you to continue with the purchase, kindly select atleast the size option.</h4>
       <div className="flex mb-3">
         <div className="mx-20">
           <img src={post.image} alt={post.name} className="drop-shadow-2xl coffee-image rounded-2xl" />
@@ -148,10 +146,10 @@ function CustomizeCoffee({ post }: CoffeeProps) {
             <span className="font-semibold">
               KES
               {' '}
-              {selectedPrice}
+              {selectedPrice.toFixed(2)}
             </span>
           </div>
-          <button type="submit" onClick={handleSelect} className="border-none px-2 py-1 font-bold text-white rounded-lg bg-amber-700 mt-5">CHECKOUT</button>
+          <button type="submit" onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(true, e)} disabled={selectedSize ? false : true} className={`border-none px-2 py-1 font-bold text-white rounded-lg mt-5 ${selectedSize ? 'bg-amber-700' : 'bg-gray-300'} `}>CHECKOUT</button>
         </div>
       </div>
       <Link to="/dashboard">
@@ -161,6 +159,12 @@ function CustomizeCoffee({ post }: CoffeeProps) {
         </div>
       </Link>
       <Footer />
+      <Checkout
+        price={selectedPrice}
+        post={post}
+        show={showModal}
+        onHide={(e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(false, e)}
+      />
     </div>
   );
 }
@@ -168,7 +172,7 @@ function CustomizeCoffee({ post }: CoffeeProps) {
 type PostState = {
   data: {
     post: { name: '', image: '', price: number }
-  }
+  },
 };
 
 const mapStateToProps = (state: PostState) => ({

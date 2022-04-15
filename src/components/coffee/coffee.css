@@ -2,3 +2,42 @@
   width: 500px;
   height: 300px; 
 }
+
+.alert {
+  color: white;
+  border-radius: 10px;
+  position: absolute;
+  top: 50px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  z-index: 1111;
+}
+
+.alert p {
+  margin: 0;
+}
+
+.alert-error {
+  background: lightcoral;
+}
+
+.alert-success {
+  background: lightgreen;
+}
+
+.alert__wrapper {
+  max-width: 500px;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 6px;
+  color: black;
+}
+
+.alert__wrapper-auth {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 20px;
+}
