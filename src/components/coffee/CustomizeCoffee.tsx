@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMugHot, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../containers/Header';
@@ -9,10 +9,9 @@ import './coffee.css';
 import '../../containers/Dashboard/Dashboard.css';
 import Footer from '../../containers/Footer';
 import { Milk, Size, Topping } from './parameter';
-// import Flash from './Flash';
-// import store from '../../redux/store';
-// import { createCoffeeParameters } from '../../redux/slices/coffee.slice';
-import Checkout from '../payment/Checkout';
+import Flash from './Flash';
+import store from '../../redux/store';
+import { createCoffeeParameters } from '../../redux/slices/coffee.slice';
 
 type CoffeeProps = {
   post: { name: '', image: '', price: number }
@@ -43,7 +42,7 @@ function CustomizeCoffee({ post }: CoffeeProps) {
   const [selectedMilk, setSelectedMilk] = useState<Milk>();
   const [selectedTopping, setSelectedTopping] = useState<Topping>();
   const [selectedPrice, setSelectedPrice] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
   let { id }: any = useParams();
   id = parseInt(id, 10);
 
@@ -52,38 +51,25 @@ function CustomizeCoffee({ post }: CoffeeProps) {
     dispatch(getCoffeePost(id));
   }, [selectedPrice]);
 
-  // const handleSelect = (e: any) => {
-  //   e.preventDefault();
-  //   const parameters = {
-  //     name: post.name,
-  //     size: selectedSize?.description,
-  //     milk: selectedMilk?.type,
-  //     topping: selectedTopping?.type,
-  //     price: selectedPrice,
-  //   };
+  const handleSelect = (e: any) => {
+    e.preventDefault();
+    const parameters = {
+      name: post.name,
+      size: selectedSize?.description,
+      milk: selectedMilk?.type,
+      topping: selectedTopping?.type,
+      price: selectedPrice,
+    };
 
-  //   if (selectedSize === undefined) {
-  //     window.flash('Kindly select atleast the size option', 'warning');
-  //   } else {
-  //     store.dispatch(createCoffeeParameters(parameters));
-  //     window.flash('You are good to go', 'success');
-  //   }
-  //   setSelectedSize(undefined);
-  //   setSelectedMilk(undefined);
-  //   setSelectedTopping(undefined);
-  // };
-
-  const toggleModal = (toogle: boolean, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (e) e.preventDefault();
-    // if (selectedSize === undefined) {
-    //   window.flash('Kindly select atleast the size option', 'warning');
-    // } else {
-    //   window.flash('You are good to go', 'success');
-    // }
+    if (selectedSize === undefined) {
+      window.flash('Kindly select atleast the size option', 'warning');
+    } else {
+      store.dispatch(createCoffeeParameters(parameters));
+      navigate('/checkout');
+    }
     setSelectedSize(undefined);
     setSelectedMilk(undefined);
     setSelectedTopping(undefined);
-    setShowModal(toogle);
   };
 
   const handlePrice = (option: Size) => {
@@ -104,6 +90,7 @@ function CustomizeCoffee({ post }: CoffeeProps) {
       <div className="mx-10 mt-10">
         <Header />
       </div>
+      <Flash />
       <h4 className="font-semibold mt-10 mb-3 ml-20">Feel free to choose any topping or milk you prefer at our cost!</h4>
       <div className="flex mb-3">
         <div className="mx-20">
@@ -164,7 +151,7 @@ function CustomizeCoffee({ post }: CoffeeProps) {
               {selectedPrice}
             </span>
           </div>
-          <button type="submit" onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(true, e)} className="border-none px-2 py-1 font-bold text-white rounded-lg bg-amber-700 mt-5">CHECKOUT</button>
+          <button type="submit" onClick={handleSelect} className="border-none px-2 py-1 font-bold text-white rounded-lg bg-amber-700 mt-5">CHECKOUT</button>
         </div>
       </div>
       <Link to="/dashboard">
@@ -174,11 +161,6 @@ function CustomizeCoffee({ post }: CoffeeProps) {
         </div>
       </Link>
       <Footer />
-      <Checkout
-        price={selectedPrice}
-        show={showModal}
-        onHide={(e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => toggleModal(false, e)}
-      />
     </div>
   );
 }
