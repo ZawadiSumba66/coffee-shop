@@ -7,9 +7,9 @@ import HomePage from './containers/HomePage/HomePage';
 import Dashboard from './containers/Dashboard/Dashboard';
 import UserSettings from './components/user/Settings/UserSettings';
 import CustomizeCoffee from './components/coffee/CustomizeCoffee';
-import Checkout from './components/payment/Checkout';
 import PrivateRoute from './routes/PrivateRoute';
 import NotFound from './routes/NotFound';
+import Orders from './components/coffee/Orders';
 
 /* eslint-disable react/function-component-definition */
 
@@ -21,7 +21,7 @@ const App = () => (
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/settings" element={<PrivateRoute><UserSettings /></PrivateRoute>} />
     <Route path="/coffee/:id" element={<PrivateRoute><CustomizeCoffee /></PrivateRoute>} />
-    <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+    <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
