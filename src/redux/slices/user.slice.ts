@@ -68,7 +68,6 @@ export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async () => {
     const response = await api.get(`/users/${userId}`, config);
-    console.log('user', response.data);
     return response.data;
   },
 );
