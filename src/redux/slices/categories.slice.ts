@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api } from '../helpers/api';
 
 export type CoffeeData = {
+  id: number,
   name: string,
   image: string,
   price: number
@@ -20,7 +21,9 @@ const initialState: StateData = {
   latte: [],
   espresso: [],
   popular: [],
-  post: { name: '', image: '', price: 0 },
+  post: {
+    id: 0, name: '', image: '', price: 0,
+  },
   status: 'idle',
   error: null,
 };

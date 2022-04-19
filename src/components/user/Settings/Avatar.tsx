@@ -6,17 +6,21 @@ import '../User.css';
 import store from '../../../redux/store';
 import { createAvatar, fetchAvatar } from '../../../redux/slices/avatar.slice';
 
-function AvatarFile({ avatar }: any) {
-  const [image, setImage] = useState('');
+type AvatarProps = {
+  avatar: string
+};
 
-  const fileChange = (files: any) => {
-    setImage(files[0]);
+function AvatarFile({ avatar }: AvatarProps) {
+  const [image, setImage] = useState<File | null>(null);
+
+  const fileChange = (files: FileList | null) => {
+    if (files) setImage(files[0]);
   };
 
   const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     store.dispatch(createAvatar(image));
-    setImage('');
+    setImage(null);
   };
 
   useEffect(() => {
@@ -26,7 +30,7 @@ function AvatarFile({ avatar }: any) {
   return (
     <div className="text-sm pl-40">
       <div className="cursor-pointer avatar-file mb-2 bg-amber-700 rounded-full">
-        <img src={avatar.avatar_url} alt="user profile" className="avatar-file rounded-full" />
+        <img src={avatar} alt="user profile" className="avatar-file rounded-full" />
       </div>
       <form onSubmit={handleUpload}>
         <input type="file" onChange={(e) => fileChange(e.target.files)} />
@@ -43,7 +47,7 @@ function AvatarFile({ avatar }: any) {
 
 type AvatarState = {
   avatar: {
-    avatar: any,
+    avatar: string,
   }
 };
 

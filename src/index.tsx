@@ -10,7 +10,7 @@ import history from './routes/history';
 
 declare global {
   interface Window {
-    flash?: any;
+    flash?: (message: string, type?: string) => boolean;
   }
 }
 

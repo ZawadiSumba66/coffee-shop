@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api, config } from '../helpers/api';
 
 export type CoffeeOrders = {
+  id: number,
   description: string,
   receipt_url: string,
-  summary: string,
   amount: number,
 };
 
@@ -22,7 +22,6 @@ export const getCoffeeOrders = createAsyncThunk(
   'order/getCoffeeOrders',
   async () => {
     const response = await api.get('/payment_intents', config);
-    console.log(response.data.data);
     return response.data.data;
   },
 );

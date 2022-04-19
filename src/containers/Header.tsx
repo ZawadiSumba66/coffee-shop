@@ -8,7 +8,7 @@ import store from '../redux/store';
 import { fetchAvatar } from '../redux/slices/avatar.slice';
 
 type HeaderProps = {
-  avatar: any
+  avatar: string
 };
 
 function Header({ avatar }: HeaderProps) {
@@ -22,7 +22,7 @@ function Header({ avatar }: HeaderProps) {
       <Logo />
       <Dropdown>
         <Dropdown.Toggle className="flex items-center bg-gray-700 hover:bg-gray-600 focus:bg-gray-500 border-gray-700">
-          <Avatar src={avatar.avatar_url} className="cursor-pointer mr-3" />
+          <Avatar src={avatar} className="cursor-pointer mr-3" />
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
@@ -39,7 +39,7 @@ function Header({ avatar }: HeaderProps) {
 
 type AvatarState = {
   avatar: {
-    avatar: any,
+    avatar: string,
   }
 };
 

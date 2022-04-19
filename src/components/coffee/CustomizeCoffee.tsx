@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Params, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMugHot, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../containers/Header';
@@ -45,25 +45,19 @@ function CustomizeCoffee({ post }: CoffeeProps) {
   const [selectedPrice, setSelectedPrice] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
-  let { id }: any = useParams();
-  id = parseInt(id, 10);
+  const { id }: Readonly<Params<string>> = useParams();
+  let coffeeId: number;
+  if (id) {
+    coffeeId = parseInt(id, 10);
+  }
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCoffeePost(id));
+    dispatch(getCoffeePost(coffeeId));
   }, []);
 
-  const parameters = {
-    name: post.name,
-    image: post.image,
-    size: selectedSize?.description,
-    milk: selectedMilk?.type,
-    topping: selectedTopping?.type,
-    price: selectedPrice,
-  };
   const toggleModal = (toggle: boolean, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (e) e.preventDefault();
-    console.log(parameters);
     setSelectedMilk(undefined);
     setSelectedTopping(undefined);
     setSelectedSize(undefined);

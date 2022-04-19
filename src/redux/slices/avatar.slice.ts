@@ -4,8 +4,8 @@ import fileChecksum from '../helpers/file_reader';
 
 export const createPresignedUrl = async (
   currentFile: any,
-  byte_size: any,
-  checksum: any,
+  byte_size: string,
+  checksum: string,
 ) => {
   const file = {
     filename: currentFile.name,
@@ -23,7 +23,7 @@ export const createPresignedUrl = async (
 };
 
 type StateAvatar = {
-  avatar: any,
+  avatar: string,
   status: 'idle' | 'pending' | 'succeeded' | 'failed',
   error: null | unknown
 };
@@ -36,7 +36,7 @@ const initialState: StateAvatar = {
 
 export const createAvatar = createAsyncThunk(
   'avatar/createAvatar',
-  async (image:any, { rejectWithValue }) => {
+  async (image: any, { rejectWithValue }) => {
     const checksum = await fileChecksum(image);
     const presignedFileParams = await createPresignedUrl(
       image,
@@ -64,8 +64,8 @@ export const createAvatar = createAsyncThunk(
           Authorization: `token ${localStorage.getItem('token')}`,
         },
       });
-      return response.data;
-    } catch (error: any) {
+      return response.data.avatar_url;
+    } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
   },
@@ -75,7 +75,7 @@ export const fetchAvatar = createAsyncThunk(
   'avatar/fetchAvatar',
   async (id) => {
     const response = await api.get(`/avatars/${id}`, config);
-    return response;
+    return response.data.avatar_url;
   },
 );
 

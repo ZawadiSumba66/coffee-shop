@@ -13,10 +13,10 @@ export type UserData = {
 
 export type StateUser = {
   user: UserData;
-  login_error: any;
-  signup_error: any;
-  update_error: any;
-  get_error: any;
+  login_error: unknown;
+  signup_error: unknown;
+  update_error: unknown;
+  get_error: unknown;
   status: 'idle' | 'pending' | 'succeeded' | 'failed';
 };
 
@@ -58,7 +58,7 @@ export const createUser = createAsyncThunk(
         return response.data;
       }
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
   },
@@ -85,7 +85,7 @@ export const loginUser = createAsyncThunk(
         return response.data;
       }
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return rejectWithValue(error.response.data.errors);
     }
   },

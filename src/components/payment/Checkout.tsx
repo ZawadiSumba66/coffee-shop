@@ -17,7 +17,7 @@ const PUBLIC_KEY = 'pk_test_51Jzi59LnUe7MF1EUOSLkS3Dh02B33WCYk5wTu2lTvQh4aeJH6Y8
 const stripePromise = loadStripe(PUBLIC_KEY);
 
 /* eslint-disable react/function-component-definition */
-const Checkout: React.FunctionComponent<any> = ({
+const Checkout = ({
   price, show, onHide, post,
 }: ModalProps) => (
   <Modal
