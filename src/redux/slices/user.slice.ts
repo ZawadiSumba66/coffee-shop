@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
 import history from '../../routes/history';
 import { api, config } from '../helpers/api';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export type UserData = {
   firstname: string;

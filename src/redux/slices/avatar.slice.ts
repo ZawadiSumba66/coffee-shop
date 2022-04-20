@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api, config } from '../helpers/api';
 import fileChecksum from '../helpers/file_reader';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const createPresignedUrl = async (
   currentFile: any,
   byte_size: string,

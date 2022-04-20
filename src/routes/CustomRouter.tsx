@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function CustomRouter({ history, ...props }: any) {
   const [state, setState] = useState({
     action: history.action,

@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const md5FromFile = (file: any) => new Promise((resolve, reject) => {
   const reader = new FileReader();
