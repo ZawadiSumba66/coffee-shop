@@ -6,10 +6,14 @@ import '../User.css';
 import AvatarFile from './Avatar';
 import Footer from '../../../containers/Footer';
 import Header from '../../../containers/Header';
-import { fetchUser, updateUser, UserData } from '../../../redux/slices/user.slice';
+import {
+  fetchUser,
+  updateUser,
+  UserData,
+} from '../../../redux/slices/user.slice';
 
 type UserProps = {
-  user: UserData
+  user: UserData;
 };
 
 function UserSettings({ user }: UserProps) {
@@ -65,7 +69,9 @@ function UserSettings({ user }: UserProps) {
         <Header />
         <div className="pl-20 pt-20 flex justify-between">
           <div>
-            <h2 className="font-bold pt-10 mb-3">Edit and save your information below.</h2>
+            <h2 className="font-bold pt-10 mb-3">
+              Edit and save your information below.
+            </h2>
             <form onSubmit={handleUpdate}>
               <div>
                 <input
@@ -99,7 +105,10 @@ function UserSettings({ user }: UserProps) {
                   onChange={handleInputChange}
                 />
               </div>
-              <button type="submit" className="bg-amber-700 rounded-b-lg p-3 w-80 mt-10 font-bold text-white">
+              <button
+                type="submit"
+                className="bg-amber-700 rounded-b-lg p-3 w-80 mt-10 font-bold text-white"
+              >
                 {status}
               </button>
             </form>
@@ -118,8 +127,8 @@ function UserSettings({ user }: UserProps) {
 
 type UserState = {
   user: {
-    user: UserData
-  }
+    user: UserData;
+  };
 };
 
 const mapStateToProps = (state: UserState) => ({
